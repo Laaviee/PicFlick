@@ -8,15 +8,13 @@ from sklearn.metrics.pairwise import cosine_similarity
 from nltk.stem import WordNetLemmatizer
 from sklearn.metrics.pairwise import linear_kernel
 import random
-'''nltk.download('stopwords')
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('wordnet')'''
+import os
+
 lemmatizer = WordNetLemmatizer()
 
-a = pd.read_csv('all.csv')
+a = pd.read_csv('all1.csv')
 a['Genre'].fillna('nil')
-movies = a[['Name','Genre','Description','Lang']]
+movies = a[['Name','Genre','Description','Lang','Cast', 'Director', 'Year', 'Run Time', 'img_L', 'Rating']]
 movies['Genre'].fillna('nil')
 
 stop_words = set(stopwords.words('english'))
@@ -26,7 +24,7 @@ def preprocess_text(text):
     words = word_tokenize(text.lower())  # Convert text to lowercase and tokenize
     my_sent=[lemmatizer.lemmatize(word) for word in words if word not in stopwords.words('english')]
     finalsent = ' '.join(my_sent)
-    symbols = "!\"#$%&(),*+-./:;<=>?@[\]^_`{|}~\n"
+    symbols = '!\"#$%&(),*+-./:;<=>?@[\]^_`{|}~\n'
 
     finalsent = finalsent.replace("n't", " not")
     finalsent = finalsent.replace("'m", " am")
@@ -70,18 +68,45 @@ cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
     recommended_movies = [movies.iloc[idx]['Name'] for idx, _ in top_recommendations]'''
 
 # ************************* Similar Movie Recommendation
-def recommend_by_similar(title, cosine_sim=cosine_sim):
-    idx = movies[movies['Name'] == title].index[0]
+'''def recommend_by_similar(title,movies, cosine_sim=cosine_sim):
+    idx = movies[movies['Name'] == title]
     sim_scores = list(enumerate(cosine_sim[idx]))
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    sim_scores = sim_scores[1:6]
+    sim_scores = sim_scores[1:]
     print(sim_scores)
     # Get the top 5 most similar movies
     movie_indices = [i[0] for i in sim_scores]
-    return movies['Name'].iloc[movie_indices]
+    mov = movies['Name'].iloc[movie_indices]
+    return mov'''
+def recommend_by_similar(movie_title, movies):
+    # Check if DataFrame is empty
+
+    # Check if movie with specified title exists
+    if movie_title not in movies['Name'].values:
+        return f"Movie '{movie_title}' not found."
+
+    # Get index of movie with specified title
+    idx = movies[movies['Name'] == movie_title].index[0]
+
+    # Calculate similarity scores
+    sim_scores = list(enumerate(cosine_sim[idx]))
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    sim_scores = sim_scores[1:]  # Exclude self-similarity
+
+    # Get indices of top similar movies
+    movie_indices = [i[0] for i in sim_scores]
+
+    # Get names of top similar movies
+    similar_movies = movies['Name'].iloc[movie_indices]
+
+    return similar_movies
+
 
 # ***************** RECOMMEND MOVIE BASED ON GENRE *******************************
-def recommend_by_genre(genres, tfidf_matrix, movies,):
+import random
+from sklearn.metrics.pairwise import linear_kernel
+
+def recommend_by_genre(genres, tfidf_matrix, movies):
     k = 10
     genres = [genre.lower() for genre in genres]
     user_tfidf = tfidf.transform([' '.join(genres)])
@@ -95,11 +120,21 @@ def recommend_by_genre(genres, tfidf_matrix, movies,):
     
     if k > 0:
         top_recommendations = random.sample(top_recommendations, k)
-        recommended_movies = [movies.iloc[idx]['Name'] for idx, _ in top_recommendations]
+        recommended_movies = [{
+            'Name': movies.iloc[idx]['Name'],
+            'Actors': movies.iloc[idx]['Cast'],
+            'Director': movies.iloc[idx]['Director'],
+            'IMDB Rating': movies.iloc[idx]['Rating'],
+            'Runtime': movies.iloc[idx]['Run Time'],
+            'Release Year': movies.iloc[idx]['Year'],
+            'Language': movies.iloc[idx]['Lang']
+
+        } for idx, _ in top_recommendations]
     else:
         recommended_movies = []  # No recommendations if top_recommendations is empty
     
     return recommended_movies
+
 
 # ********************** RECOMMEND MOVIE BASED ON A LANGUAGE ********************
 def recommend_by_language(lan, movies):

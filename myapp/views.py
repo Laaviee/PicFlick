@@ -28,8 +28,9 @@ def genre(request):
         return render(request, 'genre.html')
 def SimilarContents(request):
     if request.method == 'POST':
-        movie_title = request.POST.get('SimilarContents.html')
-        recommended_movies = recommend_by_similar(movie_title)
+        movie_title = request.POST.get('SimilarContents')
+        movie_description = request.POST.get('SimilarContents')
+        recommended_movies = recommend_by_similar(movie_title,movies)
         return render(request, 'recommendations.html', {'recommended_movies': recommended_movies})
     else:
         return render(request, 'SimilarContents.html')

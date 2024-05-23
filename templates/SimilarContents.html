@@ -52,19 +52,18 @@
 </style>
 </head>
 <body>
+    <center>
 <div class="container">
-    <div class="form">
-        <h2>Enter Movie Details</h2>
-        <form action="recommendations.html">
-            <label for="movie_name">Movie Name:</label>
-            <input type="text" id="movie_name" name="movie_name" >
-            <p> OR </p>
-            <label for="movie_description">Movie Description:</label>
-            <textarea id="movie_description" name="movie_description"></textarea>
-
-            <input type="submit" value="Next">
+        <h2>Enter Movie Name</h2>
+        <form method="post" action="{% url 'SimilarContents' %}">
+            {% csrf_token %}
+            <div class="form">
+            <input type="text" id="movie_name" name="SimilarContents" >
+</div>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
+    </center>
 </div>
 </body>
 </html>
