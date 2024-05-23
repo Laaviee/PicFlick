@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PicFlick</title>
+<!-- Link to Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<!-- Link to Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/css/select2.min.css" rel="stylesheet" />
+<!-- Link to jQuery (required by Select2) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- Link to Bootstrap JavaScript -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Link to Select2 JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/js/select2.min.js"></script>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8;
+    }
+    .container {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .preferences {
+        margin-bottom: 20px;
+    }
+    .btn-group-toggle {
+        padding: 10px 20px;
+        background-color: #e50914;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    .btn:hover {
+        background-color: #ff1e2d;
+    }
+    /* Styling for Select2 */
+    .select2-container {
+        width: 150px; /* Adjust the width as needed */
+        margin-top: 10px; /* Add margin */
+    }
+    .select2-selection--single {
+        height: 40px; /* Increase the height as needed */
+        line-height: 40px;
+    }
+    .space{
+        padding: 200px, 200px, 200px,200px;
+    }
+</style>
+</head>
+<body>
+    <center>
+    <h1>Choose Genre</h1>
+
+   <!-- genre.html -->
+<form method="post" action="{% url 'genre' %}">
+    {% csrf_token %}
+    <div class="btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-outline-primary">
+            <input type="checkbox" name="genre" value="Action"> Action
+        </label>
+        <label class="btn btn-outline-primary">
+            <input type="checkbox" name="genre" value="Comedy"> Comedy
+        </label>
+        <!-- Add more checkboxes for other genres -->
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+</center>
+<!-- Initialize Select2 -->
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+</script>
+</body>
+</html>
