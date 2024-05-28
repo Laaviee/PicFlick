@@ -78,7 +78,7 @@ cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
     movie_indices = [i[0] for i in sim_scores]
     mov = movies['Name'].iloc[movie_indices]
     return mov'''
-def recommend_by_similar(movie_title, movies):
+'''def recommend_by_similar(movie_title, movies):
     # Check if DataFrame is empty
 
     # Check if movie with specified title exists
@@ -100,7 +100,7 @@ def recommend_by_similar(movie_title, movies):
     similar_movies = movies['Name'].iloc[movie_indices]
 
     return similar_movies
-
+'''
 
 # ***************** RECOMMEND MOVIE BASED ON GENRE *******************************
 import random

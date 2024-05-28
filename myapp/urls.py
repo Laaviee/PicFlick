@@ -9,7 +9,7 @@ urlpatterns = [
     path('preferences.html', views.preferences, name ='preferences'),
     path('language.html', views.language, name='language'),
     path('genre.html',views.genre, name='genre'),
-    path('SimilarContents.html', views.SimilarContents, name='SimilarContents'),
+    #path('SimilarContents.html', views.SimilarContents, name='SimilarContents'),
     path('recommendations.html',views.recommendations, name='recommendations'),
     path('user1/', views.user1, name='user1')    
     

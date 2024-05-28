@@ -26,14 +26,14 @@ def genre(request):
     else:
         # Render the genre selection page for GET requests
         return render(request, 'genre.html')
-def SimilarContents(request):
+'''def SimilarContents(request):
     if request.method == 'POST':
         movie_title = request.POST.get('SimilarContents')
         movie_description = request.POST.get('SimilarContents')
         recommended_movies = recommend_by_similar(movie_title,movies)
         return render(request, 'recommendations.html', {'recommended_movies': recommended_movies})
     else:
-        return render(request, 'SimilarContents.html')
+        return render(request, 'SimilarContents.html')'''
 def recommendations(request):
     context = {}
     if request.method == 'POST':
@@ -43,8 +43,8 @@ def recommendations(request):
             selected_language = request.POST.get('language')
             recommended_movies = recommend_by_language(selected_language, movies)
             context['recommended_movies'] = recommended_movies
-        elif 'SimilarContents' in request.POST:
-            context['recommended_movies'] = request.POST.getlist('SimilarContents') # Example: Get list of selected genres from form
+        '''elif 'SimilarContents' in request.POST:
+            context['recommended_movies'] = request.POST.getlist('SimilarContents')'''# Example: Get list of selected genres from form
     return render(request, 'recommendations.html', context)
 
 

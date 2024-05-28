@@ -13,7 +13,7 @@ urlpatterns = [
     path('preferences/', include('myapp.urls')),
     path('language/', include('myapp.urls')),
     path('genre/', include('myapp.urls')),
-    path('SimilarContents/', include('myapp.urls')),
+    #path('SimilarContents/', include('myapp.urls')),
     path('recommendations/', include('myapp.urls')),
     path('user1/', include('myapp.urls'))
 ]
