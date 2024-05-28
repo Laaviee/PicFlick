@@ -7,10 +7,19 @@
 </head>
 <body>
     <h1>Recommended Movies</h1>
-    <ul>
-        {% for movie in recommended_movies %}
-        <li>{{ movie }}</li>
-        {% endfor %}
-    </ul>
+    {% for movie in recommended_movies %}
+            <li class="media my-4 movie-item">
+                <img class="mr-3 movie-poster" src="{{ movie.Img_L }}" alt="Movie Poster">
+                <div class="media-body">
+                    <h5 class="mt-0">{{ movie.Name }}</h5>
+                    <p>Rating: {{ movie.Rating }}</p>
+                    <p>Runtime: {{ movie.Runtime }}</p>
+                    <p>Actors: {{ movie.Actors }}</p>
+                    <p>Director: {{ movie.Director }}</p>
+                    <p>Released Year: {{ movie.Year }}</p>
+                    <p>Language: {{ movie.Lang }}</p>
+                </div>
+            </li>
+            {% endfor %}
 </body>
 </html>
