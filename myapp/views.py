@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from .ml_util import movies, recommend_by_language
 from .ml_util import movies, recommend_by_genre
-from .ml_util import recommend_by_similar
 from .ml_util import tfidf_matrix
 def index(request):
     return render(request, 'index.html')

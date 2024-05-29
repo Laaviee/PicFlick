@@ -21,21 +21,24 @@ stop_words = set(stopwords.words('english'))
 
 # ******************* DATA PREPROCESSING ******************************
 def preprocess_text(text):
-    words = word_tokenize(text.lower())  # Convert text to lowercase and tokenize
-    my_sent=[lemmatizer.lemmatize(word) for word in words if word not in stopwords.words('english')]
-    finalsent = ' '.join(my_sent)
-    symbols = '!\"#$%&(),*+-./:;<=>?@[\]^_`{|}~\n'
+    if isinstance(text, str):
+        words = word_tokenize(text.lower())  # Convert text to lowercase and tokenize
+        my_sent=[lemmatizer.lemmatize(word) for word in words if word not in stopwords.words('english')]
+        finalsent = ' '.join(my_sent)
+        symbols = '!\"#$%&(),*+-./:;<=>?@[\]^_`{|}~\n'
 
-    finalsent = finalsent.replace("n't", " not")
-    finalsent = finalsent.replace("'m", " am")
-    finalsent = finalsent.replace("'s", " is")
-    finalsent = finalsent.replace("'re", " are")
-    finalsent = finalsent.replace("'ll", " will")
-    finalsent = finalsent.replace("'ve", " have")
-    finalsent = finalsent.replace("'d", " would")
-    for i in symbols:
-        finalsent = np.char.replace(finalsent, i, ' ')
-    return finalsent
+        finalsent = finalsent.replace("n't", " not")
+        finalsent = finalsent.replace("'m", " am")
+        finalsent = finalsent.replace("'s", " is")
+        finalsent = finalsent.replace("'re", " are")
+        finalsent = finalsent.replace("'ll", " will")
+        finalsent = finalsent.replace("'ve", " have")
+        finalsent = finalsent.replace("'d", " would")
+        for i in symbols:
+            finalsent = np.char.replace(finalsent, i, ' ')
+        return finalsent
+    else:
+        return " "
 
 movies.loc[:, 'Genre'] = movies['Genre'].str.lower().str.split()
 movies['Processed_Plot'] = movies['Description'].apply(preprocess_text)
@@ -124,11 +127,11 @@ def recommend_by_genre(genres, tfidf_matrix, movies):
             'Name': movies.iloc[idx]['Name'],
             'Actors': movies.iloc[idx]['Cast'],
             'Director': movies.iloc[idx]['Director'],
-            'IMDB Rating': movies.iloc[idx]['Rating'],
+            'Rating': movies.iloc[idx]['Rating'],
             'Runtime': movies.iloc[idx]['Run Time'],
             'Release Year': movies.iloc[idx]['Year'],
-            'Language': movies.iloc[idx]['Lang']
-
+            'Language': movies.iloc[idx]['Lang'],
+            'Img_L':movies.iloc[idx]['img_L']
         } for idx, _ in top_recommendations]
     else:
         recommended_movies = []  # No recommendations if top_recommendations is empty
@@ -138,16 +141,26 @@ def recommend_by_genre(genres, tfidf_matrix, movies):
 
 # ********************** RECOMMEND MOVIE BASED ON A LANGUAGE ********************
 def recommend_by_language(lan, movies):
-  lan = str(lan)
-  mov = movies[movies['Lang'].str.contains(lan, case = False, na=False)]
-  mov = mov['Name']
-  if len(mov) >= 5:
-        return mov.sample(n=5)  # Take a sample of 5 movies
-  else:
-        return mov
+    lan = str(lan)
+    mov = movies[movies['Lang'].str.contains(lan, case=False, na=False)]
+    if len(mov) >= 5:
+        mov = mov.sample(n=5)
+        recommended_movies = [{
+        'Name': row['Name'],
+        'Actors': row['Cast'],
+        'Director': row['Director'],
+        'Rating': row['Rating'],
+        'Runtime': row['Run Time'],
+        'Year': row['Year'],
+        'Lang': row['Lang'],
+        'Img_L': row['img_L']
+    } for _, row in mov.iterrows()]
+
+    return recommended_movies
+  
 
 
-  '''def Siml_D(words,tfidf_matrix,cosine_sim):
+'''def Siml_D(words,tfidf_matrix,cosine_sim):
     lemmatizer = WordNetLemmatizer()
     stop_words = set(stopwords.words('english'))
     words = word_tokenize(text.lower())
